@@ -5,6 +5,6 @@ const requestHandler = (request, response) => {
     console.log("User-Agent: " + request.headers["user-agent"]);
     console.log("Все заголовки");
     console.log(request.headers);
-    response.end("rabotaet nakonecto");
+    response.end("rabotaet nakonect");
 };
 http.createServer(requestHandler).listen(3000);
