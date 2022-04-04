@@ -31,9 +31,12 @@ async function downloadFile () {
 downloadFile()  
 
 async function loadCollection(url, callback) {
-    fs.readFile('code.json', 'utf8', function(error, data) {
+    fs.readFile('code.json', 'utf8',
+    function(error, data) {
     if (error) {
-    console.log(error);
+    console.log(data);
+    let result = JSON.parse(data).find(item=> item.id==1 )
+        console.log(typeof(data))
 } else {
     return callback(JSON.parse(data));
     }
