@@ -1,51 +1,59 @@
-const Fs = require('fs'); 
-const Path = require('path');  
-const Axios = require('axios');
+const fs = require('fs');
+const axios = require('axios');
+const Path = require('path');
 const http = require("http");
-const fs = require("fs");
-var express = require('express');
-const { path } = require('express/lib/application');
-var app = express();
-async function downloadFile () {  
-  const url = 'https://jsonplaceholder.typicode.com/todos'
-  const path = Path.resolve(__dirname,'axios' , 'code.json')
-  const writer = Fs.createWriteStream(path)
-  
-  const response = await Axios({
-    url,
-    method: 'GET',
-    responseType: 'stream'
-    
-    
-  })
-  
-  response.data.pipe(writer)
-  
-  return new Promise((resolve, reject) => {
-    writer.on('finish', resolve)
-    writer.on('error', reject)  
-  })
- 
-}
+const requestHandler = (request, response) => {
+    response.setHeader("Content-Type", "text/html; charset=utf-8;");
+    if (request.url === "/todos/69") {
+        response.write(kirpich);
 
-downloadFile()  
-
-async function loadCollection(url, callback) {
-    fs.readFile('code.json', 'utf8',
-    function(error, data) {
-    if (error) {
-    console.log(data);
-    let result = JSON.parse(data).find(item=> item.id==1 )
-        console.log(typeof(data))
-} else {
-    return callback(JSON.parse(data));
+    } else {
+        response.write("<h2>Not found</h2>");
     }
-    });
+    response.end();
+};
+http.createServer(requestHandler).listen(3000);
+let promise = new Promise(function (resolve, reject) {
+    function download() {
+        axios.get("https://jsonplaceholder.typicode.com/todos").then(
+                response => {
+                    const a = response.data;
+                    console.log(response);
+                    let json = JSON.stringify(a);
+                    console.log(typeof json); // мы получили строку!
+                    console.log(json);
+                    fs.writeFile('todos1.json', json, function (err) {
+                        if (err) return console.log(err);
+                        console.log('json file has created');
+                        resolve('json file has created');
+
+                    });
+                }
+            )
+            .catch(function (error) {
+                reject(error);
+            })
     }
 
-
-app.get(/a/, function (req, res) {
-    res.send('success');
-  });
-
-http.createServer(app).listen(3000);
+    download();
+})
+promise.then(
+    result => {
+        fs.readFile('todos1.json', 'utf8', function (error, data) {
+            if (error) {
+                console.error(error)
+                console.log("ERROR")
+                return
+            }
+            const todos = JSON.parse(data);
+            console.log("upload has done");
+            digit=69;
+            kirpich = todos[digit];
+            console.log(kirpich);
+            console.log("данные получены!");
+        })
+    },
+    error => {
+        console.log(error);
+    }
+)
