@@ -1,4 +1,5 @@
 const express = require('express');
+const createApplication = require('express/lib/express');
 const app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(function (req, res) {
@@ -40,4 +41,3 @@ app.get('/about/directions', function (req, res) {
     // отправляем контент...
 })
 app.use(express.static(__dirname + '/public'));
-
