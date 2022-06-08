@@ -9,6 +9,8 @@ class User {
     }
   
   }
+
+
   let user = new User("Иван");
   user.sayHi();
   function User(name, age){
@@ -37,4 +39,20 @@ const user = {
         console.log('Hello!');
     }
 };
+let instance = null;
+
+function User(name, age) {
+    if (instance) {
+        return instance;
+    }
+    instance = this;
+    this.name = name;
+    this.age = age;
+
+    return instance;
+}
+const user1 = new User('Peter', 25);
+const user2 = new User('Mark', 24);
+// выводит true
+console.log(user1 === user2);
 
